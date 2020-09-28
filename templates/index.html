@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block contents %}
+<h1>Boggle</h1>
+<div class="container">
+    {% for row in board %}
+    <div class="row">
+        {% for square in row %}
+        <div class="square">square</div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</div>
+{% endblock contents %}
