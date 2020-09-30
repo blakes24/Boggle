@@ -4,8 +4,7 @@ from random import choice
 import string
 
 
-class Boggle():
-
+class Boggle:
     def __init__(self):
 
         self.words = self.read_dict("words.txt")
@@ -40,7 +39,7 @@ class Boggle():
         elif word_exists and not valid_word:
             result = "not-on-board"
         else:
-            result = "not-word"
+            result = "not-a-word"
 
         return result
 
