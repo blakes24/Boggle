@@ -1,53 +1,66 @@
-$(async function() {
-	$guessForm = $('#guess-form');
-	BASE_URL = 'http://127.0.0.1:5000';
-	score = 0;
-	time = 60;
-	words = [];
+class BoggleGame {
+	constructor(time) {
+		this.time = time;
+		this.words = [];
+		this.score = 0;
+		this.timer = setInterval(this.countDown.bind(this), 1000);
 
-	timer(time);
+		$('#guess-form').on('submit', this.submitWord.bind(this));
+	}
 
-	$guessForm.on('submit', async function(evt) {
+	postScore(word) {
+		let points = word.length;
+		this.score += points;
+		$('#score').text(this.score);
+	}
+
+	addWord(word) {
+		this.words.push(word);
+		$('#words').append(`<li>${word}</li>`);
+	}
+
+	async countDown() {
+		this.time -= 1;
+		$('#timer').text(this.time);
+		if (this.time === 0) {
+			clearInterval(this.timer);
+			$('#guess-form').hide();
+			let msg = await this.sendScore();
+			alert("Time's Up!");
+			alert(`${msg} ${this.score}`);
+		}
+	}
+
+	async submitWord(evt) {
 		evt.preventDefault(); // no page-refresh on submit
 
 		$('#msg').text('');
 		let guess = $('#guess').val();
-		if (words.includes(guess)) {
-			$('#msg').text(`${guess} already played`);
-			$('#guess').val('');
-			return;
+		if (this.words) {
+			if (this.words.includes(guess)) {
+				$('#msg').text(`${guess} already played`);
+				$('#guess').val('');
+				return;
+			}
 		}
-		const res = await axios.get(`${BASE_URL}/check`, { params: { guess: guess } });
-		msg = res.data['result'];
+		const res = await axios.get('/check', { params: { guess: guess } });
+		let msg = res.data['result'];
 		if (msg === 'ok') {
-			postScore(guess);
-			addWord(guess);
+			this.postScore(guess);
+			this.addWord(guess);
 		} else {
 			$('#msg').text(`${guess} is ${msg}`);
 		}
 		$('#guess').val('');
-	});
-
-	function postScore(word) {
-		points = word.length;
-		score += points;
-		$('#score').text(`Score:${score}`);
 	}
 
-	function addWord(word) {
-		words.push(word);
-		$('#words').append(`<li>${word}</li>`);
+	async sendScore() {
+		const res = await axios.post('/score', { score: this.score });
+		let msg = res.data['msg'];
+		let high = res.data['high'];
+		$('#high-score').text(high);
+		return msg;
 	}
+}
 
-	function timer(time) {
-		count = setInterval(function() {
-			time -= 1;
-			$('#timer').text(`timer:${time}`);
-			if (time === 0) {
-				clearInterval(count);
-				alert("Time's Up!");
-				$('input[type="submit"]').prop('disabled', true);
-			}
-		}, 1000);
-	}
-});
+let game = new BoggleGame(60);

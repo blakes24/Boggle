@@ -2,29 +2,43 @@
 
 
 {% block content %}
-<h1>Boggle</h1>
-<div id="board">
-    <div class="container">
-        {% for row in board %}
-        <div class="row">
-            {% for square in row %}
-            <div class="col">{{square}}</div>
+<div class="container">
+    <h1>Boggle</h1>
+    <div class="info">
+        <div class="score">
+            Current Score: <span id="score">0</span>
+            High Score: <span id="high-score">{{high_score}}</span>
+        </div>
+    </div>
+    <div id="board">
+        <div class="container square">
+            {% for row in board %}
+            <div class="row align-items-center">
+                {% for square in row %}
+                <div class="col tile"><p>{{square}}</p></div>
+                {% endfor %}
+            </div>
             {% endfor %}
         </div>
-        {% endfor %}
     </div>
+    <form id="guess-form" autocomplete="off" method="POST">
+        <label for="guess">Guess:</label>
+        <input type="text" name="guess" placeholder="enter a word" id="guess">
+        <input type="submit" value="Submit" class="btn-sm btn-primary" id="submit-guess">
+    </form>
+    
+    <div id="msg"></div>
+    <div class="container"><b>Timer:</b> 
+        <span id="timer">60</span>
+    </div>
+    <b>Words</b>
+    <div class="d-flex justify-content-center">
+        <div id="word-box">
+            <ul id="words"></ul>
+        </div>
+    </div>
+    <form action="/play">
+        <input type="submit" value="Restart" class="btn-sm btn-secondary restart"/>
+    </form>
 </div>
-<form id="guess-form" method="POST">
-    <label for="guess">Make a guess:</label>
-    <input type="text" name="guess" placeholder="enter a word" id="guess">
-    <input type="submit" value="Submit" class="btn-sm btn-primary">
-</form>
-<div id="score"></div>
-<div id="timer"></div>
-<div id="msg"></div>
-<div>
-    <b>Words:</b>
-    <ul id="words"></ul>
-</div>
-
 {% endblock content %}
