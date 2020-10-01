@@ -26,9 +26,7 @@ def start_game():
 
     plays = session["plays"]
     high_score = session["high_score"]
-    return render_template(
-        "index.html", board=board, plays=plays, high_score=high_score
-    )
+    return render_template("play.html", board=board, plays=plays, high_score=high_score)
 
 
 @app.route("/check")

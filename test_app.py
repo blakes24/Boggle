@@ -8,11 +8,11 @@ app.config["DEBUG_TB_HOSTS"] = ["dont-show-debug-toolbar"]
 
 
 class FlaskTests(TestCase):
-    def setUp(self):
-        with app.test_client() as client:
-            client.get("/")
+    # def setUp(self):
+    #     with app.test_client() as client:
+    #         client.get("/")
 
-    def test_start_game(self):
+    def test_home(self):
         with app.test_client() as client:
             resp = client.get("/")
             html = resp.get_data(as_text=True)
@@ -20,8 +20,17 @@ class FlaskTests(TestCase):
             self.assertEqual(resp.status_code, 200)
             self.assertIn("<h1>Boggle</h1>", html)
 
+    def test_start_game(self):
+        with app.test_client() as client:
+            resp = client.get("/play")
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('<span id="timer">60</span>', html)
+
     def test_check_word(self):
         with app.test_client() as client:
+            client.get("/play")
             with client.session_transaction() as change_session:
                 change_session["board"] = [
                     ["G", "T", "W", "Y", "F"],
@@ -35,12 +44,12 @@ class FlaskTests(TestCase):
 
     def test_check_fake_word(self):
         with app.test_client() as client:
-            client.get("/")
+            client.get("/play")
             resp = client.get("/check?guess=asdfsd")
-            self.assertEqual(resp.json["result"], "not-a-word")
+            self.assertEqual(resp.json["result"], "not a word")
 
     def test_check_invalid_word(self):
         with app.test_client() as client:
-            client.get("/")
+            client.get("/play")
             resp = client.get("/check?guess=inconsequential")
-            self.assertEqual(resp.json["result"], "not-on-board")
+            self.assertEqual(resp.json["result"], "not on board")
