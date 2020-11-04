@@ -5,6 +5,7 @@
 <div class="container">
     <h1>Boggle</h1>
     <div class="info">
+        <div>Games Played: {{plays}}</div>
         <div class="score">
             Current Score: <span id="score">0</span>
             High Score: <span id="high-score">{{high_score}}</span>
@@ -23,7 +24,7 @@
     </div>
     <form id="guess-form" autocomplete="off" method="POST">
         <label for="guess">Guess:</label>
-        <input type="text" name="guess" placeholder="enter a word" id="guess">
+        <input required type="text" name="guess" placeholder="enter a word" id="guess">
         <input type="submit" value="Submit" class="btn-sm btn-primary" id="submit-guess">
     </form>
     

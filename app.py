@@ -13,11 +13,13 @@ boggle_game = Boggle()
 
 @app.route("/")
 def home():
+    """Home page with game instructions"""
     return render_template("start.html")
 
 
 @app.route("/play")
 def start_game():
+    """generates boggle game board and adds it to session"""
     board = boggle_game.make_board()
     session["board"] = board
     if session.get("plays") is None:
@@ -31,6 +33,7 @@ def start_game():
 
 @app.route("/check")
 def check_word():
+    """Checks if a word is valid and on the board. Sends the results to front end """
     word = request.args["guess"]
     board = session["board"]
     res = boggle_game.check_valid_word(board, word)
@@ -39,6 +42,7 @@ def check_word():
 
 @app.route("/score", methods=["POST"])
 def set_score():
+    """Checks if current score is greater than the high score in session. Adds 1 to games played and returns message with high score to front end"""
     plays = session["plays"]
     high_score = session["high_score"]
     score = request.json["score"]

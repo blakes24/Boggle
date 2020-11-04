@@ -36,6 +36,7 @@ class BoggleGame {
 
 		$('#msg').text('');
 		let guess = $('#guess').val();
+
 		if (this.words) {
 			if (this.words.includes(guess)) {
 				$('#msg').text(`${guess} already played`);

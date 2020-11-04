@@ -3,14 +3,11 @@ from app import app
 from flask import session
 from boggle import Boggle
 
-app.config["TESTING"] = True
-app.config["DEBUG_TB_HOSTS"] = ["dont-show-debug-toolbar"]
-
 
 class FlaskTests(TestCase):
-    # def setUp(self):
-    #     with app.test_client() as client:
-    #         client.get("/")
+    def setUp(self):
+        app.config["TESTING"] = True
+        app.config["DEBUG_TB_HOSTS"] = ["dont-show-debug-toolbar"]
 
     def test_home(self):
         with app.test_client() as client:
