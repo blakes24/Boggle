@@ -16,7 +16,7 @@
             {% for row in board %}
             <div class="row align-items-center">
                 {% for square in row %}
-                <div class="col tile"><p>{{square}}</p></div>
+                <div class="col tile"><p class="letter">{{square}}</p></div>
                 {% endfor %}
             </div>
             {% endfor %}
@@ -42,4 +42,4 @@
         <input type="submit" value="Restart" class="btn-sm btn-secondary restart"/>
     </form>
 </div>
-{% endblock content %}
+{% endblock %}

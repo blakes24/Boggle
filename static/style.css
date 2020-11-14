@@ -35,7 +35,7 @@ body {
 	padding-bottom: 100%;
 }
 
-p {
+.letter {
 	position: absolute;
 	font-size: 2em;
 	margin: 0;
